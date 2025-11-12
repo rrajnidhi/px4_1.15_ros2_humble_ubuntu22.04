@@ -6,6 +6,7 @@ Environment for running UAV simulations with **PX4**, **ROS2**, **Gazebo**, and 
 ## Features
 
 - Fully containerized PX4 SITL environment for Ubuntu 22.04
+- Homogeneous multi UAV support
 
 
 ## Components Included
@@ -22,6 +23,18 @@ Environment for running UAV simulations with **PX4**, **ROS2**, **Gazebo**, and 
 | **Tools**           | tmux, nano, colcon           | Development & debugging               |
 
 ---
+
+<details>
+<summary>Frameworks & Tools Used</summary>
+
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-orange?logo=ubuntu)
+![ROS 2](https://img.shields.io/badge/ROS%202-Humble-blue?logo=ros)
+![PX4](https://img.shields.io/badge/PX4-v1.15.0-lightgrey?logo=px4)
+![Gazebo](https://img.shields.io/badge/Gazebo-Garden-green?logo=gazebo)
+![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)
+
+</details>
+
 
 ## Directory Structure
 
@@ -52,10 +65,32 @@ cd px4_1.15_ros2_humble_ubuntu22.04
 
 ## Launch container
 
+To start docker container 
 
 ```bash
-./run.sh
+./sitl.sh
 ```
+
+---
+
+## Environment Variables
+
+The following environment variables can be set before running `sitl.sh` to customize the simulation.  
+If not provided, the script uses the default values shown below.
+
+| Variable | Default | Value Range / Example | Description |
+|-----------|----------|------------------------|--------------|
+| **ROS_DOMAIN_ID** | `3` | Integer (0–255) | Unique ROS 2 domain ID to isolate DDS communication between multiple simulations. |
+| **PX4_UXRCE_DDS_PORT** | `8888` | Integer (e.g., 8888–9999) | UDP port used by the Micro XRCE-DDS Agent to communicate with PX4 SITL. |
+| **PX4_UXRCE_DDS_NS** | `drone` | String | Namespace prefix used for PX4 ROS 2 topics and nodes. |
+| **PX4_UAV_MODEL** | `gz_x500` | PX4 supported Gazebo model (e.g., `gz_x500`, `gz_x500_depth`, `gz_x500_vision`, `gz_standard_vtol`, `gz_rc_cessna`, `gz_quadtailsitter`, `gz_tiltrotor`, `gz_rover_differential`, `gz_rover_ackermann`, `gz_rover_mecanum`) | Specifies which UAV model to launch in Gazebo Sim. |
+| **PX4_UAV_COUNT** | `1` | Integer (1–N) | Number of UAV instances to simulate (for multi-vehicle setups). |
+
+### Example usage
+
+```bash
+ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_standard_vtol PX4_UAV_COUNT=2 ./sitl.sh
+
 
 ---
 
@@ -93,22 +128,9 @@ Ctrl+b e
 
 ---
 
-## Configuration Options (in `sitl.sh`)
-
-| Variable             | Default | Description              |
-| -------------------- | ------- | ------------------------ |
-| `ROS_DOMAIN_ID`      | 3       | ROS2 domain ID           |
-| `PX4_UXRCE_DDS_PORT` | 8888    | Micro XRCE-DDS UDP port  |
-| `PX4_UXRCE_DDS_NS`   | drone   | Namespace for PX4 topics |
-| `PX4_UAV_MODEL`      | gz_x500 | PX4 vehicle model        |
-
-You can change these values to customize your simulation setup.
-
----
-
 ## Example ROS2 Commands
 
-Once SITL and Micro XRCE-DDS Agent are running, open a new terminal or tmux pane:
+Once SITL and Micro XRCE-DDS Agent are running, use pane 2 to run any commands or run your script:
 
 ### List PX4 topics
 
@@ -159,4 +181,5 @@ The container is automatically removed on exit because `--rm` is used in `run.sh
 
 ---
 
-> Contributions welcome! Feel free to submit issues or PRs to improve this environment.
+
+> Enjoy! 
