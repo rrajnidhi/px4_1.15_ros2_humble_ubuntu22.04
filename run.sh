@@ -7,7 +7,7 @@ CURRENT_USER=$(logname)
 xhost +local:root > /dev/null
 
 # Create rosbags folder
-mkdir -p /home/$CURRENT_USER/px4_ros2_humble_rosbags
+mkdir -p ./px4_ros2_humble_rosbags
 sleep 2
 
 # Run container
@@ -19,6 +19,7 @@ docker run -it --rm \
     --privileged \
     --env="DISPLAY" \
     --workdir="/app" \
+    --volume="$(pwd)/px4_ros2_humble_rosbags:/app/rosbags" \
     --volume="/dev:/dev" \
     --network host \
     $IMAGE_NAME
