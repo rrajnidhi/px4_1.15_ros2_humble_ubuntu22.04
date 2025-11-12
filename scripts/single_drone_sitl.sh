@@ -9,7 +9,6 @@ ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-3}
 PX4_UXRCE_DDS_PORT=${PX4_UXRCE_DDS_PORT:-8888}
 PX4_UXRCE_DDS_NS=${PX4_UXRCE_DDS_NS:-drone}
 PX4_UAV_MODEL=${PX4_UAV_MODEL:-gz_x500}
-PX4_UAV_COUNT=${PX4_UAV_COUNT:-1}
 
 # Kill any existing session
 tmux kill-session -t $SESSION_NAME 2>/dev/null
@@ -18,7 +17,7 @@ tmux kill-session -t $SESSION_NAME 2>/dev/null
 tmux new-session -d -s $SESSION_NAME
 
 # Pane 0: PX4 SITL + Gazebo
-tmux send-keys -t $SESSION_NAME "cd /app/PX4-Autopilot/; ROS_DOMAIN_ID=$ROS_DOMAIN_ID PX4_UXRCE_DDS_PORT=$PX4_UXRCE_DDS_PORT PX4_UXRCE_DDS_NS=$PX4_UXRCE_DDS_NS PX4_UAV_COUNT=$PX4_UAV_COUNT make px4_sitl $PX4_UAV_MODEL HEADLESS=1" C-m
+tmux send-keys -t $SESSION_NAME "cd /app/PX4-Autopilot/; ROS_DOMAIN_ID=$ROS_DOMAIN_ID PX4_UXRCE_DDS_PORT=$PX4_UXRCE_DDS_PORT PX4_UXRCE_DDS_NS=$PX4_UXRCE_DDS_NS make px4_sitl $PX4_UAV_MODEL HEADLESS=1" C-m
 
 # Pane 1: Micro XRCE-DDS Agent with wait-for-SITL to start logic
 tmux split-window -h -t $SESSION_NAME
