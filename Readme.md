@@ -90,7 +90,7 @@ If not provided, the script uses the default values shown below.
 
 ```bash
 ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_standard_vtol PX4_UAV_COUNT=2 ./sitl.sh
-
+```
 
 ---
 
