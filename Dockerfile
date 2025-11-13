@@ -58,6 +58,7 @@ RUN curl -sSL https://packages.osrfoundation.org/gazebo.gpg | tee /usr/share/key
 
 # Python libraries
 RUN pip install --no-cache-dir \
+    numpy scipy \
     pyserial empy toml numpy pandas jinja2 kconfiglib pyulog pyros-genmsg \
     pyquaternion packaging pyproj
 
@@ -79,13 +80,18 @@ WORKDIR /app
 RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone https://github.com/PX4/px4_msgs.git -b release/1.15 && \
     git clone https://github.com/PX4/px4_ros_com.git -b release/1.15
+
+# Copy multiUAV scripts
+COPY scripts/multi_drone /app/ros2_ws/src/multi_drone
+COPY scripts/multi_drone_msg /app/ros2_ws/src/multi_drone_msg
+
 WORKDIR /app/ros2_ws
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install" && \
     echo "source /app/ros2_ws/install/setup.bash" >> /root/.bashrc
 
 # Tools & custom scripts
 RUN gem install tmuxinator
-COPY scripts /app/scripts
+COPY scripts/single_drone_sitl.sh /app/scripts
 
 # Add GPU-related groups for compatibility with host devices
 RUN groupadd -r render || true && groupadd -r video || true
