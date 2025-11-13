@@ -40,6 +40,18 @@ RUN add-apt-repository universe && \
     && echo "source /opt/ros/humble/setup.bash" >> /etc/bash.bashrc \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Simulation packages ---
+RUN apt-get update && apt-get install -y \
+    ros-humble-desktop-full \
+    ros-humble-simulation \
+    ros-humble-joint-state-publisher \
+    ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
+    ros-humble-control-toolbox \
+    ros-humble-realtime-tools \
+    ros-humble-ros-gz \
+    && rm -rf /var/lib/apt/lists/*
+
 # PX4 build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip qtcreator genromfs exiftool \
@@ -65,7 +77,7 @@ RUN pip install --no-cache-dir \
 WORKDIR /app
 RUN git clone --recursive https://github.com/PX4/PX4-Autopilot.git -b v1.15.0
 WORKDIR /app/PX4-Autopilot
-RUN bash Tools/setup/ubuntu.sh --no-nuttx --no-simtools && \
+RUN bash Tools/setup/ubuntu.sh --no-nuttx && \
     /bin/bash -c "source /opt/ros/humble/setup.bash && make px4_sitl_default"
 
 # Micro XRCE-DDS Agent
@@ -92,10 +104,10 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-in
 RUN gem install tmuxinator
 COPY scripts/single_drone_sitl.sh /app/scripts/single_drone_sitl.sh
 
-# Add GPU-related groups for compatibility with host devices
+# GPU-related groups for compatibility with host devices
 RUN groupadd -r render || true && groupadd -r video || true
 
-# --- Fix numpy/scipy compatibility at the end ---
+# Solving numpy/scipy compatibility ---
 RUN apt-get update && \
     apt-get purge -y python3-numpy python3-scipy && \
     apt-get autoremove -y && apt-get clean && \
@@ -107,6 +119,4 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash"]
-
-
 
