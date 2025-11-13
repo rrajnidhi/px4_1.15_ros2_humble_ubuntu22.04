@@ -3,7 +3,7 @@ import inspect
 from std_msgs.msg import String
 from multi_drone.move_commands.base.base_commander import DroneCommander
 from multi_drone.move_commands.base.base_g_code import BaseGCommand
-import multi100.move_commands.x500.g_code as g_code_module
+import multi_drone.move_commands.x500.g_code as g_code_module
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
