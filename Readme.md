@@ -65,10 +65,10 @@ cd px4_1.15_ros2_humble_ubuntu22.04
 
 ## Launch container
 
-To start docker container 
+To start and enter the docker container 
 
 ```bash
-./sitl.sh
+./run.sh
 ```
 
 ---
@@ -89,7 +89,7 @@ If not provided, the script uses the default values shown below.
 ### Example usage
 
 ```bash
-ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_standard_vtol PX4_UAV_COUNT=2 ./sitl.sh
+ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_standard_vtol ./sitl.sh
 ```
 
 ---
