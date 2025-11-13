@@ -58,7 +58,6 @@ RUN curl -sSL https://packages.osrfoundation.org/gazebo.gpg | tee /usr/share/key
 
 # Python libraries
 RUN pip install --no-cache-dir \
-    numpy scipy \
     pyserial empy toml numpy pandas jinja2 kconfiglib pyulog pyros-genmsg \
     pyquaternion packaging pyproj
 
@@ -91,14 +90,23 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-in
 
 # Tools & custom scripts
 RUN gem install tmuxinator
-COPY scripts/single_drone_sitl.sh /app/scripts
+COPY scripts/single_drone_sitl.sh /app/scripts/single_drone_sitl.sh
 
 # Add GPU-related groups for compatibility with host devices
 RUN groupadd -r render || true && groupadd -r video || true
 
+# --- Fix numpy/scipy compatibility at the end ---
+RUN apt-get update && \
+    apt-get purge -y python3-numpy python3-scipy && \
+    apt-get autoremove -y && apt-get clean && \
+    ls /usr/lib/python3/dist-packages | grep -E "numpy|scipy" || echo "System copies removed" && \
+    pip install --no-cache-dir --force-reinstall numpy==1.24.4 scipy==1.10.1
+    
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash"]
+
+
 
