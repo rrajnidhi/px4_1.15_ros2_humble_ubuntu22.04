@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nano vim gdb tmux openjdk-11-jdk ruby-full \
     && locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+# Install tree
+RUN apt-get update && apt-get install -y tree && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ROS 2 Humble installation
 RUN add-apt-repository universe && \
@@ -75,7 +78,7 @@ RUN pip install --no-cache-dir \
 
 # PX4-Autopilot
 WORKDIR /app
-RUN git clone --recursive https://github.com/PX4/PX4-Autopilot.git -b v1.15.0
+RUN git clone --recursive https://github.com/PX4/PX4-Autopilot.git -b v1.15.2
 WORKDIR /app/PX4-Autopilot
 RUN bash Tools/setup/ubuntu.sh --no-nuttx && \
     /bin/bash -c "source /opt/ros/humble/setup.bash && make px4_sitl_default"
