@@ -45,8 +45,9 @@ px4_1.15_ros2_humble_ubuntu22.04/
 ├── entrypoint.sh
 ├── Readme.txt
 ├── run.sh
-└── scripts/
+└── launch_files/
     └── sitl.sh
+    └── camera_detection.sh
 ```
 
 ---
@@ -78,7 +79,7 @@ To start and enter the docker container
 Once inside to launch PX4 SITL + ROS2 Bridge + Micro XRCE-DDS:
 
 ```bash
-cd /scripts
+cd /launch_files
 ./sitl.sh
 ```
 This script launches a **tmux** session with:
@@ -111,7 +112,7 @@ ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_st
 
 ## B. Single Camera drone SITL(without Mission)
 
-    A single drone with camera.
+    Object Detection implemented on a Drone camera with PX4 Autopilot and ROS 2.
 
 ---
 

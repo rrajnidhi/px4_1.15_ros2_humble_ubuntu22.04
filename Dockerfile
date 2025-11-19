@@ -1,82 +1,46 @@
-FROM ubuntu:22.04
+FROM osrf/ros:humble-desktop-full
 
 LABEL maintainer="Nidhi Raj <nidhirajr@gmail.com>"
-LABEL description="ROS2 Humble + PX4 v1.15 + Gazebo Sim (Garden) + Micro XRCE-DDS + PX4-ROS2 Bridge (Ubuntu 22.04)"
+LABEL description="ROS2 Humble + PX4 v1.15 + Gazebo Garden + Micro XRCE-DDS + PX4-ROS2 Bridge (Ubuntu 22.04)"
 
 # Environment setup
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
-    ROS_DISTRO=humble \
-    ROS_VERSION=2 \
-    ROS_PYTHON_VERSION=3 \
-    RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
-    ROS_DOMAIN_ID=0 \
-    PX4_HOME=/app/PX4-Autopilot \
-    PX4_HOME_LAT=47.397742 \
-    PX4_HOME_LON=8.545594 \
-    PX4_HOME_ALT=488
+    ROS_DOMAIN_ID=3
 
-# Base dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    tzdata locales curl wget git sudo lsb-release gnupg2 \
-    build-essential cmake ninja-build software-properties-common \
-    python3 python3-pip python3-dev python3-setuptools python3-wheel \
-    nano vim gdb tmux openjdk-11-jdk ruby-full \
-    && locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-    
-# Install tree
-RUN apt-get update && apt-get install -y tree && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# ROS 2 Humble installation
-RUN add-apt-repository universe && \
-    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | apt-key add - && \
-    echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" \
-      > /etc/apt/sources.list.d/ros2-latest.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
-      ros-humble-desktop \
-      python3-colcon-common-extensions \
-      python3-rosdep python3-vcstool \
-    && rosdep init && rosdep update \
-    && echo "source /opt/ros/humble/setup.bash" >> /etc/bash.bashrc \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Simulation packages ---
-RUN apt-get update && apt-get install -y \
-    ros-humble-desktop-full \
-    ros-humble-simulation \
-    ros-humble-joint-state-publisher \
-    ros-humble-ros2-control \
-    ros-humble-ros2-controllers \
-    ros-humble-control-toolbox \
-    ros-humble-realtime-tools \
-    ros-humble-ros-gz \
-    && rm -rf /var/lib/apt/lists/*
-
-# PX4 build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    zip qtcreator genromfs exiftool \
-    python3-jinja2 python3-empy python3-toml python3-numpy python3-yaml \
-    python3-pygments libeigen3-dev libxml2-utils clang clang-format clang-tidy lcov \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Base dependencies (non-ROS)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        tzdata locales lsb-release gnupg2 software-properties-common \
+        curl wget git sudo nano vim tmux gdb openjdk-11-jdk ruby-full tree \
+        build-essential cmake ninja-build clang lldb python3-dev python3-pip python3-venv \
+        python3-setuptools python3-wheel libgtest-dev libeigen3-dev libopencv-dev libyaml-dev \
+        libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-good gstreamer1.0-tools \
+        zip qtcreator genromfs exiftool python3-jinja2 python3-empy python3-toml python3-numpy python3-yaml \
+        python3-pygments libxml2-utils clang-format clang-tidy lcov \
+    && locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Gazebo Garden + ROS-GZ bridge
-RUN curl -sSL https://packages.osrfoundation.org/gazebo.gpg | tee /usr/share/keyrings/gazebo-archive-keyring.gpg > /dev/null && \
+RUN curl -sSL https://packages.osrfoundation.org/gazebo.gpg \
+        | tee /usr/share/keyrings/gazebo-archive-keyring.gpg > /dev/null && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/gazebo-archive-keyring.gpg] \
-    http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" \
-    > /etc/apt/sources.list.d/gazebo-stable.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
-      gz-garden ros-humble-ros-gz \
+        http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" \
+        > /etc/apt/sources.list.d/gazebo-stable.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gz-garden \
+        ros-humble-ros-gz \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Python libraries
-RUN pip install --no-cache-dir \
-    pyserial empy toml numpy pandas jinja2 kconfiglib pyulog pyros-genmsg \
-    pyquaternion packaging pyproj
+RUN pip3 install --no-cache-dir \
+        pyserial empy toml numpy pandas jinja2 kconfiglib pyulog pyros-genmsg \
+        pyquaternion packaging pyproj ultralytics opencv-python pygame aioconsole mavsdk
 
-# PX4-Autopilot
+# PX4-Autopilot v1.15.2
 WORKDIR /app
 RUN git clone --recursive https://github.com/PX4/PX4-Autopilot.git -b v1.15.2
 WORKDIR /app/PX4-Autopilot
@@ -89,30 +53,34 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
     cd Micro-XRCE-DDS-Agent && mkdir build && cd build && \
     cmake .. && make -j$(nproc) && make install && ldconfig
 
-# PX4 ROS 2 bridge (px4_msgs + px4_ros_com)
+# PX4 ROS 2 bridge workspace
 WORKDIR /app
 RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone https://github.com/PX4/px4_msgs.git -b release/1.15 && \
     git clone https://github.com/PX4/px4_ros_com.git -b release/1.15
 
 WORKDIR /app/ros2_ws
-RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install" && \
-    echo "source /app/ros2_ws/install/setup.bash" >> /root/.bashrc
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
 
-# Tools & custom scripts
+# Tools
 RUN gem install tmuxinator
-COPY scripts/single_drone_sitl.sh /app/scripts/single_drone_sitl.sh
 
-# GPU-related groups for compatibility with host devices
+# Copy launch files, models, worlds, and project files
+COPY launch_files/single_drone_sitl.sh /app/launch_files/single_drone_sitl.sh
+COPY launch_files/camera_detection.sh /app/launch_files/camera_detection.sh
+RUN mkdir -p /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
+COPY . /root/PX4-ROS2-Gazebo-YOLOv8
+COPY /resources/simulation/models/. /root/.gz/models/
+COPY /resources/simulation/models_docker/. /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
+COPY /resources/simulation/worlds/default_docker.sdf /root/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf
+RUN echo "export GZ_SIM_RESOURCE_PATH=/root/.gz/models" >> /root/.bashrc
+
+# GPU-related groups for host device compatibility
 RUN groupadd -r render || true && groupadd -r video || true
 
-# Solving numpy/scipy compatibility ---
-RUN apt-get update && \
-    apt-get purge -y python3-numpy python3-scipy && \
-    apt-get autoremove -y && apt-get clean && \
-    ls /usr/lib/python3/dist-packages | grep -E "numpy|scipy" || echo "System copies removed" && \
-    pip install --no-cache-dir --force-reinstall numpy==1.24.4 scipy==1.10.1
-    
+# Solve numpy/scipy compatibility issues
+RUN pip3 uninstall -y numpy
+
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
