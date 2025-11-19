@@ -5,7 +5,7 @@ from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
 from multi_drone.utils.methods import load_yaml_params
 from multi_drone.scripts.runner import launch_robot, get_microxrce_agent_exec
-from multi_drone.scripts.gazebo_server import run_simulation_gazebo  # <-- ADD THIS
+from multi_drone.scripts.gazebo_server import run_simulation_gazebo  
 
 
 # Gazebo world name
