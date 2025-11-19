@@ -6,7 +6,7 @@ Environment for running UAV simulations with **PX4**, **ROS2**, **Gazebo**, and 
 ## Features
 
 - Fully containerized PX4 SITL environment for Ubuntu 22.04
-- Homogeneous multi UAV support
+- Camera drone with object detection
 
 
 ## Components Included
@@ -73,7 +73,7 @@ To start and enter the docker container
 
 ---
 
-## A. Single drone SITL
+## A. Single drone SITL(without Mission)
 
 Once inside to launch PX4 SITL + ROS2 Bridge + Micro XRCE-DDS:
 
@@ -100,7 +100,6 @@ If not provided, the script uses the default values shown below.
 | **PX4_UXRCE_DDS_PORT** | `8888` | Integer (e.g., 8888–9999) | UDP port used by the Micro XRCE-DDS Agent to communicate with PX4 SITL. |
 | **PX4_UXRCE_DDS_NS** | `drone` | String | Namespace prefix used for PX4 ROS 2 topics and nodes. |
 | **PX4_UAV_MODEL** | `gz_x500` | PX4 supported Gazebo model (e.g., `gz_x500`, `gz_x500_depth`, `gz_x500_vision`, `gz_standard_vtol`, `gz_rc_cessna`, `gz_quadtailsitter`, `gz_tiltrotor`, `gz_rover_differential`, `gz_rover_ackermann`, `gz_rover_mecanum`) | Specifies which UAV model to launch in Gazebo Sim. |
-| **PX4_UAV_COUNT** | `1` | Integer (1–N) | Number of UAV instances to simulate (for multi-vehicle setups). |
 
 #### Example usage
 
@@ -110,21 +109,12 @@ ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_st
 
 ---
 
-## B. Multi drone SITL : Method-1
+## B. Single Camera drone SITL(without Mission)
 
-    Multi-drone is implemented as ros2 package. Launch it with following command
-
-    ```bash
-    ros2 launch multi_drone test_multi_drone_run.launch.py 
-    ```
+    A single drone with camera.
 
 ---
 
-## C. Multi drone SITL : Method-2
-
-    This is still in development.
-
----
 
 
 ## Help with ros2 and tmux  

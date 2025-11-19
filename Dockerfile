@@ -95,10 +95,6 @@ RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone https://github.com/PX4/px4_msgs.git -b release/1.15 && \
     git clone https://github.com/PX4/px4_ros_com.git -b release/1.15
 
-# Copy multiUAV scripts
-COPY scripts/multi_drone /app/ros2_ws/src/multi_drone
-COPY scripts/multi_drone_msg /app/ros2_ws/src/multi_drone_msg
-
 WORKDIR /app/ros2_ws
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install" && \
     echo "source /app/ros2_ws/install/setup.bash" >> /root/.bashrc
