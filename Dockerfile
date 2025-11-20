@@ -76,10 +76,9 @@ RUN gem install tmuxinator
 COPY launch_files/single_drone_sitl.sh /app/launch_files/single_drone_sitl.sh
 COPY launch_files/camera_detection.sh /app/launch_files/camera_detection.sh
 RUN mkdir -p /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
-COPY . /root/PX4-ROS2-Gazebo-YOLOv8
 COPY /resources/simulation/models/. /root/.gz/models/
 COPY /resources/simulation/models_docker/. /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
-COPY /resources/simulation/worlds/default_docker.sdf /root/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf
+COPY /resources/simulation/worlds/default_docker.sdf /app/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf
 RUN echo "export GZ_SIM_RESOURCE_PATH=/root/.gz/models" >> /root/.bashrc
 
 # GPU-related groups for host device compatibility
