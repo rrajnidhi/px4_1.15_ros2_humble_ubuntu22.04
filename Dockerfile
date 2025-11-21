@@ -79,7 +79,8 @@ RUN mkdir -p /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
 COPY /resources/simulation/models/. /root/.gz/models/
 COPY /resources/simulation/models_docker/. /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
 COPY /resources/simulation/worlds/default_docker.sdf /app/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf
-RUN echo "export GZ_SIM_RESOURCE_PATH=/root/.gz/models" >> /root/.bashrc
+# set model path to include PX4 models
+RUN echo "export GZ_SIM_RESOURCE_PATH=/root/PX4-Autopilot/Tools/simulation/gz/models:/root/.gz/models" >> /root/.bashrc
 
 # GPU-related groups for host device compatibility
 RUN groupadd -r render || true && groupadd -r video || true
