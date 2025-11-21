@@ -31,8 +31,8 @@ echo 'PX4 SITL detected. Starting Micro XRCE-DDS Agent...'
 MicroXRCEAgent udp4 -p $PX4_UXRCE_DDS_PORT" C-m
 
 # Pane 2: ROS2 image bridge
-tmux split-window -v -t $SESSION_NAME:0.0
-tmux send-keys -t $SESSION_NAME:0.2 'bash -c "source /opt/ros/humble/setup.bash && source /app/ros2_ws/install/setup.bash && sleep 6 && ros2 run ros_gz_image image_bridge /camera"' C-m
+bridge_pane=$(tmux split-window -v -t $SESSION_NAME:0.0 -P -F "#{pane_id}")
+tmux send-keys -t $bridge_pane 'bash -c "source /opt/ros/humble/setup.bash && source /app/ros2_ws/install/setup.bash && sleep 6 && ros2 run ros_gz_image image_bridge /camera"' C-m
 
 # Pane 3: Gazebo GUI (optional, can attach to same simulation)
 sim_pane=$(tmux split-window -v -t $SESSION_NAME:0.0 -P -F "#{pane_id}")
