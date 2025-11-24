@@ -112,10 +112,43 @@ ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_st
 
 ## B. Single Camera drone SITL(without Mission)
 
-    Object Detection implemented on a Drone camera with PX4 Autopilot and ROS 2.
+    Object Detection implemented on a Drone camera with PX4 Autopilot and ROS 2. T
+    This is currently under development.
 
 ---
 
+## C. Multi UAV
+
+    This is acheived by running multiple containers of this docker image.
+
+    #### Example usage:
+    Here 20 and 25 being the UAV ids.
+
+    In terminal 1:
+
+     ```bash
+    ./run_for_multi_UAV.sh 20
+
+    ```
+    then inside container, you are already in launch_files folder
+     ```bash
+    ./for_multi_uav_spawn.sh
+
+    ```
+
+    In terminal 2:
+
+     ```bash
+    ./run_for_multi_UAV.sh 25
+
+    ```
+    do the same here also
+     ```bash
+    ./for_multi_uav_spawn.sh
+
+    ```
+
+---
 
 
 ## Help with ros2 and tmux  

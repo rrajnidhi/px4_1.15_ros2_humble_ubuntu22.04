@@ -75,6 +75,7 @@ RUN gem install tmuxinator
 # Copy launch files, models, worlds, and project files
 COPY launch_files/single_drone_sitl.sh /app/launch_files/single_drone_sitl.sh
 COPY launch_files/camera_detection.sh /app/launch_files/camera_detection.sh
+COPY launch_files/for_multi_uav_spawn.sh /app/launch_files/for_multi_uav_spawn.sh
 RUN mkdir -p /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
 COPY /resources/simulation/models/. /root/.gz/models/
 COPY /resources/simulation/models_docker/. /root/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/
