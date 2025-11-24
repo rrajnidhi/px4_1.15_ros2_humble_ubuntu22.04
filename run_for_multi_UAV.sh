@@ -60,4 +60,3 @@ docker run -it --rm \
 
 # Revoke GUI permissions
 xhost -local:root > /dev/null
-
