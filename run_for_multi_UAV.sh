@@ -28,7 +28,7 @@ echo " Container:       $CONTAINER_NAME"
 echo " ROS_DOMAIN_ID:   $ROS_DOMAIN_ID"
 echo " XRCE_DDS_PORT:   $XRCE_PORT"
 echo " MAV_SYS_ID:      $MAV_SYS_ID"
-echo " MAVLINK_PORT:    $MAVLINK_PORT"
+echo " GCS_PORT:        $GCS_PORT"
 echo " Rosbags Folder:  $BAG_FOLDER"
 
 # Create rosbags directory
@@ -51,7 +51,7 @@ docker run -it --rm \
     --env PX4_UXRCE_DDS_PORT="$XRCE_PORT" \
     --env PX4_UXRCE_DDS_NS="cam_drone_$MAV_SYS_ID" \
     --env MAV_SYS_ID="$MAV_SYS_ID" \
-    --env MAVLINK_PORT="$MAVLINK_PORT" \
+    --env GCS_PORT="$GCS_PORT" \
     --workdir="/app" \
     --volume="$BAG_FOLDER:/app/rosbags" \
     --volume="/dev:/dev" \

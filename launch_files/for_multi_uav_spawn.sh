@@ -7,7 +7,7 @@ SESSION_NAME="sitl_px4_ros2_humble_camera"
 
 # per-drone GCS-MAVLink isolation variables
 MAV_SYS_ID=${MAV_SYS_ID:-1}
-GCS_PORT=${GCS_PORT_PORT:-18570}
+GCS_PORT=${GCS_PORT:-18570}
 
 # Environment variables (use external values if provided, otherwise default)
 ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-3}
@@ -24,7 +24,7 @@ PX4_GZ_MODEL_POSE="$(echo "$BASE_POSE_X + $X_OFFSET" | bc),$BASE_POSE_Y,$BASE_PO
 
 # Step 0: update px4-rc.params with correct MAV_SYS_ID and 
 RC_PARAMS_FILE="/app/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/px4-rc.params"
-RC_MAVLINK_FILE="$PX4_HOME/ROMFS/px4fmu_common/init.d-posix/px4-rc.mavlink"
+RC_MAVLINK_FILE="/app/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/px4-rc.mavlink"
 
 if [ -f "$RC_PARAMS_FILE" ]; then
     # Remove any existing line with MAV_SYS_ID
