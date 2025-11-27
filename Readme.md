@@ -129,7 +129,7 @@ In terminal 1:
 ```bash
 ./run_for_multi_UAV.sh 20
 ```
-then inside container, you are already in launch_files folder
+then inside container,
 
 ```bash
 cd launch_files
@@ -148,7 +148,9 @@ do the same here also
 cd launch_files
 ./for_multi_uav_spawn.sh
 ```
+
 repeat this as many number of times. Each will create a container with the unique IDs.
+
 ---
 
 
