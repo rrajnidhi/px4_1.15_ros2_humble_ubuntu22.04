@@ -112,43 +112,43 @@ ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_st
 
 ## B. Single Camera drone SITL(without Mission)
 
-    Object Detection implemented on a Drone camera with PX4 Autopilot and ROS 2. T
-    This is currently under development.
+Object Detection implemented on a Drone camera with PX4 Autopilot and ROS 2. 
+This is currently under development.
 
 ---
 
 ## C. Multi UAV
 
-    This is acheived by running multiple containers of this docker image.
+This is acheived by running multiple containers of this docker image.
 
-    #### Example usage:
-    Here 20 and 25 being the UAV ids. Use different ID numbers for each starups.
+#### Example usage:
+Here 20 and 25 being the UAV ids. Use different ID numbers for each starups.
 
-    In terminal 1:
+In terminal 1:
 
-    ```bash
-    ./run_for_multi_UAV.sh 20
-    ```
-    then inside container, you are already in launch_files folder
+```bash
+./run_for_multi_UAV.sh 20
+```
+then inside container, you are already in launch_files folder
 
-    ```bash
-    cd launch_files
-    ./for_multi_uav_spawn.sh
-    ```
+```bash
+cd launch_files
+./for_multi_uav_spawn.sh
+```
 
-    In terminal 2:
+In terminal 2:
 
-    ```bash
-    ./run_for_multi_UAV.sh 25
-    ```
+```bash
+./run_for_multi_UAV.sh 25
+```
 
-    do the same here also
+do the same here also
 
-    ```bash
-    cd launch_files
-    ./for_multi_uav_spawn.sh
-    ```
-    repeat this as many number of times. Each will create a container with the unique IDs.
+```bash
+cd launch_files
+./for_multi_uav_spawn.sh
+```
+repeat this as many number of times. Each will create a container with the unique IDs.
 ---
 
 
