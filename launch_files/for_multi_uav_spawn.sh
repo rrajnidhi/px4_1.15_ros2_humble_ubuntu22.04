@@ -49,7 +49,7 @@ tmux kill-session -t $SESSION_NAME 2>/dev/null
 # Start new tmux session (detached)
 tmux new-session -d -s $SESSION_NAME
 
-# Pane 0: PX4 SITL + Gazebo headless
+# Pane 0: PX4 SITL + Gazebo headless . Remove headless if needed
 tmux send-keys -t $SESSION_NAME "
 cd /app/PX4-Autopilot/;
 
@@ -81,11 +81,11 @@ MicroXRCEAgent udp4 -p $PX4_UXRCE_DDS_PORT
 
 # Pane 2: ROS2 image bridge
 bridge_pane=$(tmux split-window -v -t $SESSION_NAME:0.0 -P -F "#{pane_id}")
-tmux send-keys -t $bridge_pane 'bash -c "source /opt/ros/humble/setup.bash && source /app/ros2_ws/install/setup.bash && sleep 6 && ros2 run ros_gz_image image_bridge /camera"' C-m
+tmux send-keys -t $bridge_pane 'bash -c "source /opt/ros/humble/setup.bash && source /app/ros2_ws/install/setup.bash && export GZ_PARTITION=$MAV_SYS_ID && sleep 6 && ros2 run ros_gz_image image_bridge /camera"' C-m
 
-# Pane 3: Gazebo GUI (optional) Uncomment if you need to see sim for each UAVs. This might overload your PC.!
+# Pane 3: testing/development pane
 sim_pane=$(tmux split-window -v -t $SESSION_NAME:0.0 -P -F "#{pane_id}")
-# tmux send-keys -t $sim_pane 'bash -c "sleep 5; gz sim /app/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf"' C-m
+tmux send-keys -t $sim_pane 'bash -c "sleep 10; ros2 run camera_subscriber camera_subscriber_node"' C-m # or ros2 run ros_gz_bridge parameter_bridge /camera@sensor_msgs/msg/Image@gz.msgs.Image
 
 # ROS2 tools window
 tmux new-window -t $SESSION_NAME -n "ros2_tools"

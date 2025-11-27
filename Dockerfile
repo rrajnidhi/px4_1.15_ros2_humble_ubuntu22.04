@@ -66,6 +66,9 @@ RUN mkdir -p ros2_ws/src && cd ros2_ws/src && \
     git clone https://github.com/PX4/px4_msgs.git -b release/1.15 && \
     git clone https://github.com/PX4/px4_ros_com.git -b release/1.15
 
+WORKDIR /app/ros2_ws/src
+    COPY /resources/ros_packages/camera_subsciber/. /app/ros2_ws/src/camera_subsciber/
+
 WORKDIR /app/ros2_ws
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
 
