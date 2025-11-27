@@ -122,32 +122,33 @@ ROS_DOMAIN_ID=5 PX4_UXRCE_DDS_PORT=9000 PX4_UXRCE_DDS_NS=uav PX4_UAV_MODEL=gz_st
     This is acheived by running multiple containers of this docker image.
 
     #### Example usage:
-    Here 20 and 25 being the UAV ids.
+    Here 20 and 25 being the UAV ids. Use different ID numbers for each starups.
 
     In terminal 1:
 
-     ```bash
+    ```bash
     ./run_for_multi_UAV.sh 20
-
     ```
     then inside container, you are already in launch_files folder
-     ```bash
-    ./for_multi_uav_spawn.sh
 
+    ```bash
+    cd launch_files
+    ./for_multi_uav_spawn.sh
     ```
 
     In terminal 2:
 
-     ```bash
+    ```bash
     ./run_for_multi_UAV.sh 25
-
     ```
+
     do the same here also
-     ```bash
+
+    ```bash
+    cd launch_files
     ./for_multi_uav_spawn.sh
-
     ```
-
+    repeat this as many number of times. Each will create a container with the unique IDs.
 ---
 
 
